@@ -10,7 +10,22 @@ const {
 
 const config = require('../config/env');
 
-const ytDlp = new YTDlpWrap();
+const fs = require('fs');
+
+const possiveisCaminhosYtDlp = [
+  process.env.YT_DLP_PATH,
+  '/root/.local/bin/yt-dlp',
+  '/home/railway/.local/bin/yt-dlp',
+  '/app/.local/bin/yt-dlp'
+].filter(Boolean);
+
+const caminhoYtDlp = possiveisCaminhosYtDlp.find(caminho => fs.existsSync(caminho));
+
+console.log('🔎 yt-dlp usado:', caminhoYtDlp || 'yt-dlp do PATH');
+
+const ytDlp = caminhoYtDlp
+  ? new YTDlpWrap(caminhoYtDlp)
+  : new YTDlpWrap();
 
 async function baixarAudio(videoId, url) {
   const caminhoAudio = caminhoArquivoTemp(videoId, 'mp3');
