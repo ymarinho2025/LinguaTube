@@ -1,0 +1,36 @@
+{
+  "name": "linguatube-backend-ajustado",
+  "version": "1.0.0",
+  "description": "Backend funcional do LinguaTube: YouTube -> áudio -> Groq Whisper -> tradução -> API para frontend",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "check": "node -c src/server.js && node -c src/routes/videoRoutes.js && node -c src/services/audioService.js && node -c src/services/videoService.js && node -c src/services/traducaoService.js && node -c src/services/transcricaoService.js"
+  },
+  "keywords": [
+    "youtube",
+    "idiomas",
+    "groq",
+    "whisper",
+    "express"
+  ],
+  "author": "LinguaTube",
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "ffmpeg-static": "^5.3.0",
+    "ffprobe-static": "^3.1.0",
+    "groq-sdk": "^0.9.0",
+    "yt-dlp-wrap": "^2.3.12"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
