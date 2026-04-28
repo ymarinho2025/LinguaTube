@@ -4,8 +4,11 @@ nixPkgs = ["nodejs_20", "ffmpeg", "python312", "python312Packages.pip"]
 [phases.install]
 cmds = [
   "npm install",
-  "python -m pip install --user yt-dlp",
-  "export PATH=$PATH:/root/.local/bin && yt-dlp --version"
+  "python -m pip install yt-dlp --target ./vendor/python",
+  "mkdir -p ./bin",
+  "cp ./vendor/python/bin/yt-dlp ./bin/yt-dlp",
+  "chmod +x ./bin/yt-dlp",
+  "./bin/yt-dlp --version"
 ]
 
 [start]
