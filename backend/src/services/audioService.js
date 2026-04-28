@@ -14,9 +14,10 @@ const fs = require('fs');
 
 const possiveisCaminhosYtDlp = [
   process.env.YT_DLP_PATH,
+  '/app/bin/yt-dlp',
+  './bin/yt-dlp',
   '/root/.local/bin/yt-dlp',
-  '/home/railway/.local/bin/yt-dlp',
-  '/app/.local/bin/yt-dlp'
+  '/home/railway/.local/bin/yt-dlp'
 ].filter(Boolean);
 
 const caminhoYtDlp = possiveisCaminhosYtDlp.find(caminho => fs.existsSync(caminho));

@@ -8,6 +8,7 @@ cmds = [
   "mkdir -p ./bin",
   "cp ./vendor/python/bin/yt-dlp ./bin/yt-dlp",
   "chmod +x ./bin/yt-dlp",
+  "ls -la ./bin",
   "./bin/yt-dlp --version"
 ]
 
