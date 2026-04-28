@@ -1,7 +1,6 @@
-const YTDlpWrap = require('yt-dlp-wrap').default;
+const { execFile } = require('child_process');
+const { promisify } = require('util');
 const path = require('path');
-const fs = require('fs');
-const ffmpegPath = require('ffmpeg-static');
 
 const {
   caminhoArquivoTemp,
@@ -11,38 +10,29 @@ const {
 
 const config = require('../config/env');
 
-function encontrarYtDlp() {
-  const caminhosBase = [
-    process.cwd(),
-    path.resolve(__dirname, '../../'),
-    path.resolve(__dirname, '../../../')
-  ];
+const execFileAsync = promisify(execFile);
 
-  const caminhos = [
-    process.env.YT_DLP_PATH,
-    ...caminhosBase.map(base => path.join(base, 'bin', 'yt-dlp')),
-    '/app/bin/yt-dlp',
-    '/root/.local/bin/yt-dlp',
-    '/home/railway/.local/bin/yt-dlp'
-  ].filter(Boolean);
+const PYTHONPATH = path.join(process.cwd(), 'vendor', 'python');
 
-  console.log('📂 cwd:', process.cwd());
-  console.log('🔎 caminhos testados yt-dlp:', caminhos);
+async function rodarYtDlp(args) {
+  const { stdout, stderr } = await execFileAsync(
+    'python',
+    ['-m', 'yt_dlp', ...args],
+    {
+      env: {
+        ...process.env,
+        PYTHONPATH
+      },
+      maxBuffer: 1024 * 1024 * 20
+    }
+  );
 
-  const encontrado = caminhos.find(caminho => fs.existsSync(caminho));
-
-  if (!encontrado) {
-    throw new Error(
-      'yt-dlp não encontrado. Verifique se o nixpacks.toml está dentro da pasta backend e se o Railway fez rebuild sem cache.'
-    );
+  if (stderr) {
+    console.warn(stderr);
   }
 
-  console.log('✅ yt-dlp usado:', encontrado);
-  return encontrado;
+  return stdout;
 }
-
-const ytDlpPath = encontrarYtDlp();
-const ytDlp = new YTDlpWrap(ytDlpPath);
 
 async function baixarAudio(videoId, url) {
   const caminhoAudio = caminhoArquivoTemp(videoId, 'mp3');
@@ -51,7 +41,7 @@ async function baixarAudio(videoId, url) {
   console.log(`⬇️  Iniciando download do áudio: ${videoId}`);
 
   try {
-    const args = [
+    await rodarYtDlp([
       url,
       '-f', 'ba',
       '--extract-audio',
@@ -60,13 +50,7 @@ async function baixarAudio(videoId, url) {
       '--output', caminhoAudio,
       '--no-playlist',
       '--no-warnings'
-    ];
-
-    if (ffmpegPath) {
-      args.push('--ffmpeg-location', path.dirname(ffmpegPath));
-    }
-
-    await ytDlp.execPromise(args);
+    ]);
 
     const tamanho = tamanhoArquivoMB(caminhoAudio);
 
@@ -87,7 +71,7 @@ async function baixarAudio(videoId, url) {
   } catch (err) {
     apagarArquivoTemp(caminhoAudio);
 
-    const mensagemOriginal = err.message || '';
+    const mensagemOriginal = err.stderr || err.message || '';
 
     if (mensagemOriginal.includes('Private video')) {
       throw new Error('Este vídeo é privado e não pode ser acessado.');
@@ -107,7 +91,7 @@ async function baixarAudio(videoId, url) {
 
 async function buscarInfoVideo(url) {
   try {
-    const infoJson = await ytDlp.execPromise([
+    const infoJson = await rodarYtDlp([
       url,
       '--dump-json',
       '--no-download',
@@ -124,7 +108,7 @@ async function buscarInfoVideo(url) {
     };
 
   } catch (err) {
-    console.warn('⚠️  Não foi possível buscar info do vídeo:', err.message);
+    console.warn('⚠️  Não foi possível buscar info do vídeo:', err.stderr || err.message);
     return {
       titulo: 'Sem título',
       duracaoSegundos: 0,

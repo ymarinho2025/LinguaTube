@@ -1,15 +1,11 @@
 [phases.setup]
-nixPkgs = ["nodejs_20", "ffmpeg", "python312", "python312Packages.pip"]
+nixPkgs = ["nodejs_20", "python312", "python312Packages.pip", "ffmpeg"]
 
 [phases.install]
 cmds = [
   "npm install",
   "python -m pip install yt-dlp --target ./vendor/python",
-  "mkdir -p ./bin",
-  "cp ./vendor/python/bin/yt-dlp ./bin/yt-dlp",
-  "chmod +x ./bin/yt-dlp",
-  "ls -la ./bin",
-  "./bin/yt-dlp --version"
+  "PYTHONPATH=./vendor/python python -m yt_dlp --version"
 ]
 
 [start]
