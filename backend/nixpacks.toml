@@ -4,8 +4,9 @@ nixPkgs = ["nodejs_20", "ffmpeg", "python312", "python312Packages.pip"]
 [phases.install]
 cmds = [
   "npm install",
-  "python -m pip install --user yt-dlp"
+  "python -m pip install --user yt-dlp",
+  "export PATH=$PATH:/root/.local/bin && yt-dlp --version"
 ]
 
 [start]
-cmd = "export PATH=$PATH:/root/.local/bin && node src/server.js"
+cmd = "npm start"

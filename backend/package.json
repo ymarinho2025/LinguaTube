@@ -4,9 +4,8 @@
   "description": "Backend funcional do LinguaTube: YouTube -> áudio -> Groq Whisper -> tradução -> API para frontend",
   "main": "src/server.js",
   "scripts": {
-  "start": "node src/server.js",
-  "dev": "nodemon src/server.js",
-  "check": "node -c src/server.js && node -c src/routes/videoRoutes.js && node -c src/services/audioService.js && node -c src/services/videoService.js && node -c src/services/traducaoService.js && node -c src/services/transcricaoService.js"
+  "start": "export PATH=$PATH:/root/.local/bin && node src/server.js",
+  "dev": "nodemon src/server.js"
 },
   "keywords": [
     "youtube",
