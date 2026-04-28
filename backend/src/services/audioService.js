@@ -16,7 +16,7 @@ const PYTHONPATH = path.join(process.cwd(), 'vendor', 'python');
 
 async function rodarYtDlp(args) {
   const { stdout, stderr } = await execFileAsync(
-    'python',
+    'python3',
     ['-m', 'yt_dlp', ...args],
     {
       env: {
