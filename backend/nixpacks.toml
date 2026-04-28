@@ -1,5 +1,11 @@
 [phases.setup]
-nixPkgs = ["nodejs_20", "yt-dlp", "ffmpeg"]
+nixPkgs = ["nodejs_20", "ffmpeg", "python312", "python312Packages.pip"]
+
+[phases.install]
+cmds = [
+  "npm install",
+  "python -m pip install --user yt-dlp"
+]
 
 [start]
-cmd = "npm start"
+cmd = "export PATH=$PATH:/root/.local/bin && node src/server.js"
