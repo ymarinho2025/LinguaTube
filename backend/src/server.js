@@ -8,12 +8,13 @@ const { limparArquivosAntigos } = require('./utils/arquivo');
 const app = express();
 
 app.use(cors({
-  origin(origin, callback) {
-    if (!origin || config.allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error(`Origem não permitida pelo CORS: ${origin}`));
-  },
-  credentials: true,
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+app.options('*', cors());
+
 app.use(express.json({ limit: '2mb' }));
 
 app.get('/', (req, res) => res.json({ ok: true, mensagem: 'LinguaTube Backend online', docs: '/api/health' }));
