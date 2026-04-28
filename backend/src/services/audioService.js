@@ -16,9 +16,7 @@ const {
 const config = require("../config/env");
 
 // Cria o cliente do yt-dlp
-const ytDlp = new YTDlpWrap(
-  "C:/Users/Kali-Linux/AppData/Roaming/Python/Python314/Scripts/yt-dlp.exe",
-);
+const ytDlp = new YTDlpWrap();
 
 /**
  * Baixa o áudio de um vídeo do YouTube
