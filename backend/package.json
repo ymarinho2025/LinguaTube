@@ -4,13 +4,13 @@
   "description": "Backend funcional do LinguaTube: YouTube -> áudio -> Groq Whisper -> tradução -> API para frontend",
   "main": "src/server.js",
   "scripts": {
-  "start": "node src/server.js",
-  "dev": "nodemon src/server.js",
-  "check": "node -c src/server.js && node -c src/routes/videoRoutes.js && node -c src/services/audioService.js && node -c src/services/videoService.js && node -c src/services/traducaoService.js && node -c src/services/transcricaoService.js"
-},
-"engines": {
-  "node": "20.x"
-},
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "check": "node -c src/server.js && node -c src/routes/videoRoutes.js && node -c src/services/audioService.js && node -c src/services/videoService.js && node -c src/services/traducaoService.js && node -c src/services/transcricaoService.js"
+  },
+  "engines": {
+    "node": "20.x"
+  },
   "keywords": [
     "youtube",
     "idiomas",
@@ -28,6 +28,7 @@
     "ffmpeg-static": "^5.3.0",
     "ffprobe-static": "^3.1.0",
     "groq-sdk": "^0.9.0",
+    "youtube-dl-exec": "^3.1.5",
     "yt-dlp-wrap": "^2.3.12"
   },
   "devDependencies": {
